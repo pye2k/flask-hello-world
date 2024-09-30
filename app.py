@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, json
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 import os
 import enricher
 
@@ -27,7 +28,7 @@ def hello_world():
 @app.route('/catalog')
 def catalog():
     # Query all items from the CatalogItem table
-    items = CatalogItem.query.all()
+    items = CatalogItem.query.order_by(desc(CatalogItem.id)).all()
     
     # Render the catalog.html template and pass the items to it
     return render_template('catalog.html', items=items)
