@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -25,28 +25,8 @@ def hello_world():
 
 @app.route('/catalog')
 def catalog():
-    catalog_items_count = CatalogItem.query.count()
+    # Query all items from the CatalogItem table
+    items = CatalogItem.query.all()
     
-    num_rows = 3  # Change this variable to generate more or fewer rows
-    
-    page_html = f'''
-    <h1>This is the catalog page.</h1>
-
-    <h3>Currently there are {catalog_items_count} items in the catalog.</h3>
-
-    <table border="1">
-        <tr>
-            <th>Row Number</th>
-            <th>Square of Row Number</th>
-        </tr>
-    '''
-    for i in range(1, num_rows + 1):
-        page_html += f'''
-        <tr>
-            <td>{i}</td>
-            <td>{i**2}</td>
-        </tr>
-        '''
-    page_html += '</table>'
-    
-    return page_html
+    # Render the catalog.html template and pass the items to it
+    return render_template('catalog.html', items=items)

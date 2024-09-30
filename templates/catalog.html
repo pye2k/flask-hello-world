@@ -1,0 +1,45 @@
+<!-- templates/catalog.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog Items</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Catalog Items</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Input</th>
+                <th>Title</th>
+                <th>Short Description</th>
+                <th>Long Description</th>
+                <th>Specifications</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.input }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.short_description }}</td>
+                <td>{{ item.long_description }}</td>
+                <td>{{ item.specifications | tojson }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
