@@ -39,7 +39,7 @@ def add_catalog_item():
         
         # Call the enricher.go function to process the input text
         enriched_resp = enricher.go(input_text)
-        enriched_data = json.loads(enriched_resp)
+        enriched_data = json.loads(enriched_resp.replace('\n', ''))
 
         # Extract the fields from the returned JSON object
         title = enriched_data.get('title')
