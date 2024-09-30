@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, json
 from flask_sqlalchemy import SQLAlchemy
 import os
+import enricher
 
 app = Flask(__name__)
 
@@ -30,3 +31,42 @@ def catalog():
     
     # Render the catalog.html template and pass the items to it
     return render_template('catalog.html', items=items)
+
+@app.route('/catalog/add', methods=['GET', 'POST'])
+def add_catalog_item():
+    if request.method == 'POST':
+        input_text = request.form['inputText']
+        
+        # Call the enricher.go function to process the input text
+        enriched_resp = enricher.go(input_text)
+        enriched_data = json.loads(enriched_resp)
+
+        # Extract the fields from the returned JSON object
+        title = enriched_data.get('title')
+        short_description = enriched_data.get('short_description')
+        detailed_description = enriched_data.get('detailed_description')
+        specifications = enriched_data.get('specifications')
+
+        print(title)
+        print(short_description)
+        print(detailed_description)
+        print(specifications)
+      
+        # Create a new CatalogItem object with the extracted data
+        new_item = CatalogItem(
+            input=input_text,
+            title=title,
+            short_description=short_description,
+            long_description=detailed_description,
+            specifications=specifications
+        )
+        
+        # Persist the new item to the database
+        db.session.add(new_item)
+        db.session.commit()
+    
+        # Redirect to some confirmation or the catalog list after adding
+        return redirect(url_for('catalog'))
+    
+    # Render the form when the method is GET
+    return render_template('catalog_add.html')

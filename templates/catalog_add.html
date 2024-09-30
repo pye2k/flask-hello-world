@@ -1,0 +1,17 @@
+<!-- templates/catalog_add.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Catalog Item</title>
+</head>
+<body>
+    <h1>Enrich a Catalog Item</h1>
+    <form action="/catalog/add" method="POST">
+        <label for="inputText">Enter Catalog Data:</label><br><br>
+        <textarea id="inputText" name="inputText" rows="40" cols="80" placeholder="Enter your text here..."></textarea><br><br>
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>
