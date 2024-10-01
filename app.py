@@ -48,11 +48,15 @@ def add_catalog_item():
         detailed_description = enriched_data.get('detailed_description')
         specifications = enriched_data.get('specifications')
 
-        print(title)
-        print(short_description)
-        print(detailed_description)
-        print(specifications)
-      
+        print(f'''Persisting the following fields:
+              Title         : {title}
+              Short Desc    : {short_description}
+              Detailed Desc : {detailed_description}
+              Specifications: {specifications}
+
+              For the input : {input_text}
+              ''')
+
         # Create a new CatalogItem object with the extracted data
         new_item = CatalogItem(
             input=input_text,
