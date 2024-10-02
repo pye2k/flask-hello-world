@@ -94,7 +94,23 @@ def catalog_realtime():
         return f"Error: No item found with id {item_id}."
 
     # Get the 'search_query' parameter if it exists
-    search_query = request.args.get('search_query', '')
+    search_query = request.args.get('search_query', '').strip()
 
-    # Render the template, passing the item and search_query
-    return render_template('catalog_realtime.html', item=item, search_query=search_query)
+    # Initialize personalized_description
+    personalized_description = ''
+
+    # If search_query exists, process it
+    if search_query:
+        try:
+            # Call the enricher.interweave function
+            personalized_description = search_query # placeholder to test layouts
+        except Exception as e:
+            personalized_description = f"An error occurred while processing your search: {str(e)}"
+
+    # Render the template, passing the item, search_query, and personalized_description
+    return render_template(
+        'catalog_realtime.html',
+        item=item,
+        search_query=search_query,
+        personalized_description=personalized_description
+    )

@@ -11,6 +11,7 @@
         }
         .search-box {
             margin-top: 20px;
+            margin-bottom: 20px;
         }
         .search-box input[type="text"] {
             width: 300px;
@@ -36,7 +37,10 @@
         <h1>Realtime Catalog Item</h1>
         
         {% if item.short_description %}
-            <p class="description"><strong>Short Description:</strong> {{ item.short_description }}</p>
+            <div class="description">
+                <strong>Short Description:</strong><br>
+                <p>{{ item.short_description }}</p>
+            </div>
         {% else %}
             <p class="error">No short description available for this item.</p>
         {% endif %}
@@ -46,11 +50,18 @@
                 <!-- Include the 'id' as a hidden field -->
                 <input type="hidden" name="id" value="{{ item.id }}">
                 
-                <label for="search_query">Enter Search Query:</label><br><br>
+                <label for="search_query"><strong>Enter Search Query:</strong></label><br><br>
                 <input type="text" id="search_query" name="search_query" placeholder="Type your search query here" value="{{ search_query }}">
                 <button type="submit">Search</button>
             </form>
         </div>
+
+        {% if personalized_description %}
+            <div class="description">
+                <strong>Personalized Description:</strong><br>
+                <p>{{ personalized_description }}</p>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>
