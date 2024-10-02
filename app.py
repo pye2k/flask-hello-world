@@ -75,3 +75,26 @@ def add_catalog_item():
     
     # Render the form when the method is GET
     return render_template('catalog_add.html')
+
+@app.route('/catalog/realtime')
+def catalog_realtime():
+    # Get the 'id' query parameter from the URL
+    item_id = request.args.get('id')
+    if item_id is None:
+        return "Error: No 'id' parameter provided. Please specify an 'id' in the URL."
+    try:
+        # Convert id to integer
+        item_id = int(item_id)
+    except ValueError:
+        return "Error: Invalid 'id' parameter. Please provide a valid integer."
+
+    # Query the CatalogItem with the given id
+    item = CatalogItem.query.get(item_id)
+    if item is None:
+        return f"Error: No item found with id {item_id}."
+
+    # Get the 'search_query' parameter if it exists
+    search_query = request.args.get('search_query', '')
+
+    # Render the template, passing the item and search_query
+    return render_template('catalog_realtime.html', item=item, search_query=search_query)
