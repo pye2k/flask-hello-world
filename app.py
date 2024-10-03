@@ -103,7 +103,7 @@ def catalog_realtime():
     if search_query:
         try:
             # Call the enricher.interweave function
-            personalized_description = search_query # placeholder to test layouts
+            personalized_description = enricher.interweave(item.short_description, search_query)
         except Exception as e:
             personalized_description = f"An error occurred while processing your search: {str(e)}"
 

@@ -1,4 +1,5 @@
 from openai import OpenAI
+import json
 
 def go(input):
     client = OpenAI()
@@ -59,3 +60,46 @@ def go(input):
     # "```json" is 7 character long, but slicing count start from 0. "{" is at 7th character.
     # "```" is 3 character long (at the end).
     return message_content[7:-3]
+
+def interweave(short_description, search_query):
+    client = OpenAI()
+
+    # Retrieve the handle to the "Search Query Interweaver" Assistant
+    assistant = client.beta.assistants.retrieve("asst_guPYqtgOFMO8T7gNVydJuFdz")
+
+    # Create a thread (a conversation between user and agent)
+    thread = client.beta.threads.create()
+
+    # Create an object with the short_description and search_query
+    input_object = {
+        "text_block": short_description,
+        "search_query": search_query
+    }
+
+    # Add a message to the Thread (from the user)
+    message = client.beta.threads.messages.create(
+        thread_id = thread.id,
+        role = "user",
+        content = json.dumps(input_object)
+        )
+
+    # Create a run, and poll for completion
+    run = client.beta.threads.runs.create_and_poll(
+        thread_id = thread.id,
+        assistant_id = assistant.id,
+        )
+
+    # What does the agent have to say?
+    if run.status == 'completed':
+        messages = client.beta.threads.messages.list(
+            thread_id=thread.id
+        )
+        #print(messages)
+    else:
+        print(run.status)
+
+    # Return the data
+    message_content = messages.data[0].content[0].text.value
+    print("Response: \n")
+    print(f"{message_content}\n\n")
+    return message_content
