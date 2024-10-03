@@ -19,7 +19,7 @@
     <h1>Catalog Items</h1>
     <div style="margin: 20px">
         <a href="{{ url_for('add_catalog_item') }}">
-            <button type="button">Add New Item</button>
+            <button type="button" style="background-color:green;color:white">Add New Item</button>
         </a>
     </div>
     <table>
@@ -43,7 +43,7 @@
                     {{ item.short_description }}
                     <div style="margin: 20px">
                         <a href="{{ url_for('catalog_realtime', id=item.id) }}">
-                            <button type="button">Realtime modification!</button>
+                            <button type="button" style="background-color:green;color:white">Realtime modification!</button>
                         </a>
                     </div>
                 </td>
