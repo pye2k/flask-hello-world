@@ -39,7 +39,14 @@
                 <td>{{ item.id }}</td>
                 <td>{{ item.input }}</td>
                 <td>{{ item.title }}</td>
-                <td>{{ item.short_description }}</td>
+                <td>
+                    {{ item.short_description }}
+                    <div style="margin: 20px">
+                        <a href="{{ url_for('catalog_realtime', id=item.id) }}">
+                            <button type="button">Realtime modification!</button>
+                        </a>
+                    </div>
+                </td>
                 <td>{{ item.long_description }}</td>
                 <td><pre>{{ item.specifications | tojson(indent=4) | safe }}</pre></td>
             </tr>
