@@ -30,6 +30,9 @@
         .error {
             color: red;
         }
+        .highlight {
+            background-color: yellow;
+        }
     </style>
 </head>
 <body>
@@ -59,7 +62,7 @@
         {% if personalized_description %}
             <div class="description">
                 <strong>Personalized Description:</strong><br>
-                <p>{{ personalized_description }}</p>
+                <p>{{ personalized_description | safe}}</p>
             </div>
         {% endif %}
     </div>

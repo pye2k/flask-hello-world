@@ -1,5 +1,5 @@
 from openai import OpenAI
-import json
+import json, re
 
 def go(input):
     client = OpenAI()
@@ -103,3 +103,15 @@ def interweave(short_description, search_query):
     print("Response: \n")
     print(f"\t\t{message_content}\n")
     return message_content
+
+def highlight_keywords(text, keywords):
+    # Escape special characters in keywords
+    escaped_keywords = [re.escape(word) for word in keywords]
+    # Join the keywords into a regex pattern
+    pattern = r'(' + '|'.join(escaped_keywords) + r')'
+    # Define the replacement function
+    def replace_func(match):
+        return f'<span class="highlight">{match.group(0)}</span>'
+    # Substitute the keywords in the text with the highlighted version
+    highlighted_text = re.sub(pattern, replace_func, text, flags=re.IGNORECASE)
+    return highlighted_text

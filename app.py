@@ -104,6 +104,12 @@ def catalog_realtime():
         try:
             # Call the enricher.interweave function
             personalized_description = enricher.interweave(item.short_description, search_query)
+
+            # Split the search_query into individual keywords
+            search_keywords = search_query.split()
+
+            # Highlight the keywords in the personalized_description
+            highlighted_result = enricher.highlight_keywords(personalized_description, search_keywords)
         except Exception as e:
             personalized_description = f"An error occurred while processing your search: {str(e)}"
 
@@ -112,5 +118,5 @@ def catalog_realtime():
         'catalog_realtime.html',
         item=item,
         search_query=search_query,
-        personalized_description=personalized_description
+        personalized_description=highlighted_result
     )
