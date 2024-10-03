@@ -98,6 +98,7 @@ def catalog_realtime():
 
     # Initialize personalized_description
     personalized_description = ''
+    highlighted_result = ''
 
     # If search_query exists, process it
     if search_query:
