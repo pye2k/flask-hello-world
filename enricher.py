@@ -54,7 +54,7 @@ def go(input):
     # Return the data
     message_content = messages.data[0].content[0].text.value
     print("Response: \n")
-    print(f"{message_content}\n\n")
+    print(f"\t\t{message_content}\n")
 
     # The slicing is to remove some random stuff from the OpenAI APIs
     # "```json" is 7 character long, but slicing count start from 0. "{" is at 7th character.
@@ -101,5 +101,5 @@ def interweave(short_description, search_query):
     # Return the data
     message_content = messages.data[0].content[0].text.value
     print("Response: \n")
-    print(f"{message_content}\n\n")
+    print(f"\t\t{message_content}\n")
     return message_content
