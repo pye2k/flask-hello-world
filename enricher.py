@@ -116,7 +116,7 @@ def highlight_keywords(text, keywords):
     highlighted_text = re.sub(pattern, replace_func, text, flags=re.IGNORECASE)
     return highlighted_text
 
-def get_descriptions_from_image(image_base64, context):
+def get_descriptions_from_image(image_url, context):
     client = OpenAI()
 
     # Retrieve the handle to the "Catalog descriptions from images" Assistant
@@ -135,9 +135,7 @@ def get_descriptions_from_image(image_base64, context):
                     {
                         "type": "image_url",
                         "image_url": {
-                            #"url": "https://cdn-images.farfetch-contents.com/18/58/89/44/18588944_40146949_2048.jpg"
-                            "url": "https://image4.cdnsbg.com/2/576/660622_1702341715830.jpg"
-                            #"url": f"data:image/jpeg;base64,{image_base64}"
+                            "url": image_url
                         }
                     }
                 ]
@@ -156,7 +154,7 @@ def get_descriptions_from_image(image_base64, context):
         messages = client.beta.threads.messages.list(
             thread_id=thread.id
         )
-        print(messages)
+        #print(messages)
     else:
         print(run.status)
         print(run.last_error)

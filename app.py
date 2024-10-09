@@ -133,28 +133,14 @@ def allowed_file(filename):
 def catalog_from_image():
     descriptions = {}
     if request.method == 'POST':
-        # Check if the post request has the file part
-        if 'image' not in request.files:
-            return render_template('catalog_from_image.html', error="No image file part")
-        
-        image = request.files['image']
+        image_url = request.form.get('image_url', '').strip()
         additional_context = request.form.get('context', '').strip()
 
-        # If user does not select file, browser may submit an empty part without filename
-        if image.filename == '':
-            return render_template('catalog_from_image.html', error="No selected image")
-
-        if image and allowed_file(image.filename):
-            # Instead of saving the image, send it directly to the enricher module
-            try:
-                # Read the image file into memory and base64 encode it
-                image_bytes = image.read()
-                image_base64 = base64.b64encode(image_bytes).decode('utf-8')
-                
-                # Call a function in enricher to handle the OpenAI request with image and context
-                resp_json = enricher.get_descriptions_from_image(image_base64, additional_context)
-                descriptions = json.loads(resp_json.replace('\n', ''))
-            except Exception as e:
-                return render_template('catalog_from_image.html', error=f"An error occurred: {str(e)}")
+        try:
+            # Call a function in enricher to handle the OpenAI request with image and context
+            resp_json = enricher.get_descriptions_from_image(image_url, additional_context)
+            descriptions = json.loads(resp_json.replace('\n', ''))
+        except Exception as e:
+            return render_template('catalog_from_image.html', error=f"An error occurred: {str(e)}")
 
     return render_template('catalog_from_image.html', descriptions=descriptions)
