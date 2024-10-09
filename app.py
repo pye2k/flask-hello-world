@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 import os
 import enricher
+import base64
 
 app = Flask(__name__)
 
@@ -121,3 +122,39 @@ def catalog_realtime():
         search_query=search_query,
         personalized_description=highlighted_result
     )
+
+# Define the allowed file extensions for images
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/catalog/from_image', methods=['GET', 'POST'])
+def catalog_from_image():
+    descriptions = {}
+    if request.method == 'POST':
+        # Check if the post request has the file part
+        if 'image' not in request.files:
+            return render_template('catalog_from_image.html', error="No image file part")
+        
+        image = request.files['image']
+        additional_context = request.form.get('context', '').strip()
+
+        # If user does not select file, browser may submit an empty part without filename
+        if image.filename == '':
+            return render_template('catalog_from_image.html', error="No selected image")
+
+        if image and allowed_file(image.filename):
+            # Instead of saving the image, send it directly to the enricher module
+            try:
+                # Read the image file into memory and base64 encode it
+                image_bytes = image.read()
+                image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+                
+                # Call a function in enricher to handle the OpenAI request with image and context
+                resp_json = enricher.get_descriptions_from_image(image_base64, additional_context)
+                descriptions = json.loads(resp_json.replace('\n', ''))
+            except Exception as e:
+                return render_template('catalog_from_image.html', error=f"An error occurred: {str(e)}")
+
+    return render_template('catalog_from_image.html', descriptions=descriptions)

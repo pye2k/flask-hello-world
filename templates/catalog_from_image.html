@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload an Image for Catalog Description</title>
+    <style>
+        .container {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .error {
+            color: red;
+        }
+        .description {
+            margin-top: 20px;
+        }
+        .description p {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Catalog Descriptions from Image</h1>
+        
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form action="{{ url_for('catalog_from_image') }}" method="post" enctype="multipart/form-data">
+            <label for="image">Upload Image:</label><br>
+            <input type="file" id="image" name="image" accept="image/*"><br><br>
+
+            <label for="context">Additional Context (e.g., Model Number):</label><br>
+            <input type="text" id="context" name="context" placeholder="Enter additional context here"><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        {% if descriptions %}
+            <div class="description">
+                <h2>Generated Descriptions:</h2>
+                <p><strong>Product Title:</strong> {{ descriptions.get('product_title', 'N/A') }}</p>
+                <p><strong>Short Description:</strong> {{ descriptions.get('short_description', 'N/A') }}</p>
+                <p><strong>Detailed Description:</strong> {{ descriptions.get('detailed_description', 'N/A') }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

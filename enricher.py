@@ -115,3 +115,58 @@ def highlight_keywords(text, keywords):
     # Substitute the keywords in the text with the highlighted version
     highlighted_text = re.sub(pattern, replace_func, text, flags=re.IGNORECASE)
     return highlighted_text
+
+def get_descriptions_from_image(image_base64, context):
+    client = OpenAI()
+
+    # Retrieve the handle to the "Catalog descriptions from images" Assistant
+    assistant = client.beta.assistants.retrieve("asst_tL7qx1mIDxeZQuwvdH1BNM5n")
+
+    # Create a thread (a conversation between user and agent)
+    thread = client.beta.threads.create(
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": context
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            #"url": "https://cdn-images.farfetch-contents.com/18/58/89/44/18588944_40146949_2048.jpg"
+                            "url": "https://image4.cdnsbg.com/2/576/660622_1702341715830.jpg"
+                            #"url": f"data:image/jpeg;base64,{image_base64}"
+                        }
+                    }
+                ]
+            }
+        ]
+    )
+
+    # Create a run, and poll for completion
+    run = client.beta.threads.runs.create_and_poll(
+        thread_id = thread.id,
+        assistant_id = assistant.id,
+    )
+
+    # What does the agent have to say?
+    if run.status == 'completed':
+        messages = client.beta.threads.messages.list(
+            thread_id=thread.id
+        )
+        print(messages)
+    else:
+        print(run.status)
+        print(run.last_error)
+
+    # Return the data
+    message_content = messages.data[0].content[0].text.value
+    print("Response: \n")
+    print(f"\t\t{message_content}\n")
+    
+    # The slicing is to remove some random stuff from the OpenAI APIs
+    # "```json" is 7 character long, but slicing count start from 0. "{" is at 7th character.
+    # "```" is 3 character long (at the end).
+    return message_content[7:-3]
