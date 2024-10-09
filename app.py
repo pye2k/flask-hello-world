@@ -21,6 +21,7 @@ class CatalogItem(db.Model):
     short_description = db.Column(db.Text, nullable=True)
     long_description = db.Column(db.Text, nullable=True)
     specifications = db.Column(db.JSON, nullable=True)
+    image_url = db.Column(db.Text, nullable=True)
 
 @app.route('/')
 def hello_world():
