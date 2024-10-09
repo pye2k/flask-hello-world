@@ -144,7 +144,8 @@ def catalog_from_image():
 
             # Create a new CatalogItem object with the extracted data
             new_item = CatalogItem(
-                input=image_url,
+                input=additional_context,
+                image_url=image_url,
                 title=descriptions.get('product_title'),
                 short_description=descriptions.get('short_description'),
                 long_description=descriptions.get('detailed_description')
