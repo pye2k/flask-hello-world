@@ -40,7 +40,13 @@
             {% for item in items %}
             <tr>
                 <td>{{ item.id }}</td>
-                <td>{{ item.input }}</td>
+                <td>
+                    {% if item.input.startswith('http') %}
+                        <img src="{{ item.input }}" style="max-width: 200px; max-height: 150px;">
+                    {% else %}
+                        {{ item.input }}
+                    {% endif %}
+                </td>
                 <td>{{ item.title }}</td>
                 <td>
                     {{ item.short_description }}
