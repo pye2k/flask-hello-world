@@ -140,6 +140,18 @@ def catalog_from_image():
             # Call a function in enricher to handle the OpenAI request with image and context
             resp_json = enricher.get_descriptions_from_image(image_url, additional_context)
             descriptions = json.loads(resp_json.replace('\n', ''))
+
+            # Create a new CatalogItem object with the extracted data
+            new_item = CatalogItem(
+                input=image_url,
+                title=descriptions.get('product_title'),
+                short_description=descriptions.get('short_description'),
+                long_description=descriptions.get('detailed_description')
+            )
+
+            # Persist the new item to the database
+            db.session.add(new_item)
+            db.session.commit()
         except Exception as e:
             return render_template('catalog_from_image.html', error=f"An error occurred: {str(e)}")
 
