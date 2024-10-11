@@ -4,6 +4,7 @@ from sqlalchemy import desc
 import os
 import enricher
 import base64
+import re
 
 app = Flask(__name__)
 
@@ -42,7 +43,11 @@ def add_catalog_item():
         
         # Call the enricher.go function to process the input text
         enriched_resp = enricher.go(input_text)
-        enriched_data = json.loads(enriched_resp.replace('\n', ''))
+        # Clean up the resultant JSON
+        enriched_resp = enriched_resp.replace('\n', '')
+        # Remove leading and trailing spaces in keys using regex
+        enriched_resp = re.sub(r'"\s*([^"]*?)\s*"\s*:', r'"\1":', enriched_resp)
+        enriched_data = json.loads(enriched_resp)
 
         # Extract the fields from the returned JSON object
         title = enriched_data.get('title')
