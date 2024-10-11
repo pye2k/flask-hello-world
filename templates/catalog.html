@@ -5,15 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalog Items</title>
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
+    <script type="text/javascript">
+        function toggleText(button) {
+            // Get the sibling <span> element (the hidden text)
+            var hiddenText = button.nextElementSibling;
+
+            // Toggle the visibility
+            if (hiddenText.style.display === "none" || hiddenText.style.display === "") {
+                hiddenText.style.display = "inline";
+                button.innerText = "Hide Details";
+            } else {
+                hiddenText.style.display = "none";
+                button.innerText = "Show Details";
+            }
         }
-        th, td {
-            padding: 10px;
-        }
-    </style>
+    </script>
 </head>
 <body>
     <h1>Catalog Items</h1>
@@ -55,7 +63,10 @@
                     </div>
                 </td>
                 <td>{{ item.long_description }}</td>
-                <td><pre>{{ item.specifications | tojson(indent=4) | safe }}</pre></td>
+                <td>
+                    <button onclick="toggleText(this)">Show Details</button>
+                    <span class="hidden-text"><pre>{{ item.specifications | tojson(indent=4) | safe }}</pre></span>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
