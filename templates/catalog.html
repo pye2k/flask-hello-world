@@ -26,12 +26,8 @@
 <body>
     <h1>Catalog Items</h1>
     <div style="margin: 20px">
-        <a href="{{ url_for('add_catalog_item') }}">
-            <button type="button">Add New Item</button>
-        </a>
-        <a href="{{ url_for('catalog_from_image') }}">
-            <button type="button">Item from image</button>
-        </a>
+        <a href="{{ url_for('add_catalog_item') }}"><button type="button">Add New Item</button></a>
+        <a href="{{ url_for('catalog_from_image') }}"><button type="button">Item from image</button></a>
     </div>
     <table>
         <thead>
