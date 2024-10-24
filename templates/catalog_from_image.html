@@ -48,6 +48,7 @@
                 <p><strong>Product Title:</strong> {{ descriptions.get('product_title', 'N/A') }}</p>
                 <p><strong>Short Description:</strong> {{ descriptions.get('short_description', 'N/A') }}</p>
                 <p><strong>Detailed Description:</strong> {{ descriptions.get('detailed_description', 'N/A') }}</p>
+                <p><strong>Specifications:</strong> {{ descriptions.get('specifications', 'N/A') | tojson(indent=4) | safe }}</p>
             </div>
         {% endif %}
     </div>

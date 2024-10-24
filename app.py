@@ -144,8 +144,12 @@ def catalog_from_image():
 
         try:
             # Call a function in enricher to handle the OpenAI request with image and context
-            resp_json = enricher.get_descriptions_from_image(image_url, additional_context)
-            descriptions = json.loads(resp_json.replace('\n', ''))
+            enriched_resp = enricher.get_descriptions_from_image(image_url, additional_context)
+            # Clean up the resultant JSON
+            enriched_resp = enriched_resp.replace('\n', '')
+            # Remove leading and trailing spaces in keys using regex
+            enriched_resp = re.sub(r'"\s*([^"]*?)\s*"\s*:', r'"\1":', enriched_resp)
+            descriptions = json.loads(enriched_resp.replace('\n', ''))
 
             # Create a new CatalogItem object with the extracted data
             new_item = CatalogItem(
@@ -153,7 +157,8 @@ def catalog_from_image():
                 image_url=image_url,
                 title=descriptions.get('product_title'),
                 short_description=descriptions.get('short_description'),
-                long_description=descriptions.get('detailed_description')
+                long_description=descriptions.get('detailed_description'),
+                specifications=descriptions.get('specifications')
             )
 
             # Persist the new item to the database
