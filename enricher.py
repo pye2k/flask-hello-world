@@ -167,4 +167,8 @@ def get_descriptions_from_image(image_url, context):
     # The slicing is to remove some random stuff from the OpenAI APIs
     # "```json" is 7 character long, but slicing count start from 0. "{" is at 7th character.
     # "```" is 3 character long (at the end).
-    return message_content[7:-3]
+    if message_content.startswith("```json") and message_content.endswith("```"):
+        print("Slicing the response")
+        return message_content[7:-3]
+    else:
+        return message_content
