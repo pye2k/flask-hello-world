@@ -168,3 +168,22 @@ def catalog_from_image():
             return render_template('catalog_from_image.html', error=f"An error occurred: {str(e)}")
 
     return render_template('catalog_from_image.html', descriptions=descriptions)
+
+@app.route('/catalog/pdp')
+def catalog_pdp():
+    # Get the 'id' query parameter from the URL
+    item_id = request.args.get('id')
+    if item_id is None:
+        return "Error: No 'id' parameter provided. Please specify an 'id' in the URL."
+    try:
+        # Convert id to integer
+        item_id = int(item_id)
+    except ValueError:
+        return "Error: Invalid 'id' parameter. Please provide a valid integer."
+
+    # Query the CatalogItem with the given id
+    item = CatalogItem.query.get(item_id)
+    if item is None:
+        return f"Error: No item found with id {item_id}."
+
+    return render_template('catalog_pdp.html', item=item)

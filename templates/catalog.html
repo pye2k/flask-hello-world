@@ -49,7 +49,9 @@
                         <br/><br/><img src="{{ item.image_url }}" style="max-width: 200px; max-height: 150px;">
                     {% endif %}
                 </td>
-                <td>{{ item.title }}</td>
+                <td>
+                    <a href="{{ url_for('catalog_pdp', id=item.id) }}">{{ item.title }}</a>
+                </td>
                 <td>
                     {{ item.short_description }}
                     <div style="margin: 20px">

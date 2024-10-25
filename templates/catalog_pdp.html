@@ -1,0 +1,80 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acme Inc. - Product Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body class="bg-white text-gray-700 font-sans">
+    <header class="flex justify-between items-center p-6">
+      <div class="text-2xl font-bold">Acme Inc.</div>
+      <nav class="space-x-8">
+        <a href="#" class="text-gray-600 hover:text-gray-900">Home</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">Our Products</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">Blog</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">About</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900">Contact</a>
+      </nav>
+      <div class="text-gray-600">
+        <i class="fas fa-shopping-cart"></i> Cart (0)
+      </div>
+    </header>
+
+    <main class="container mx-auto p-8 grid grid-cols-2 gap-8">
+      <div class="relative">
+        <img
+          src="{{ item.image_url }}"
+          alt="Black tea cup on a dark surface"
+          class="max-w-sm object-cover mx-auto"
+        />
+        <span class="absolute top-4 right-4 bg-red-100 text-red-600 font-semibold px-3 py-1 text-sm">
+          On Sale.
+        </span>
+      </div>
+      <div>
+        <h1 class="text-4xl font-semibold mb-4">{{ item.title }}</h1>
+        <p class="text-gray-500 mb-4">{{ item.short_description }}</p>
+        <div class="flex items-center mb-4">
+          {% set price = range(5, 90) | random %}
+          <span class="text-3xl font-bold text-red-600">${{ "%0.2f" | format(price | float) }}</span>
+          {% set orig_price = range(price + 1, ((price + 2) * 1.4) | int) | random %}
+          <span class="text-gray-400 line-through ml-4">${{ "%0.2f" | format(orig_price | float) }}</span>
+        </div>
+        <div class="mb-6">
+          <label class="text-sm text-gray-500 uppercase">Quantity</label>
+          <div class="flex items-center space-x-2 mt-2">
+            <input
+              type="number"
+              value="1"
+              class="border border-gray-300 p-2 w-16 text-center"
+            />
+            <button class="bg-gray-900 text-white py-2 px-6 hover:bg-gray-700">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <section class="container mx-auto p-8 grid grid-cols-2 gap-8">
+      <div>
+        <h2 class="text-lg font-semibold mb-4 uppercase">Details</h2>
+        <p class="text-gray-600">{{ item.long_description }}</p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold mb-4 uppercase">Dimensions</h2>
+        <ul class="list-inside list-disc">
+            {% if item.specifications %}
+                {% for kv in item.specifications %}
+                <li>{{ kv.name }}: {{ kv.value }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+      </div>
+    </section>
+  </body>
+</html>
