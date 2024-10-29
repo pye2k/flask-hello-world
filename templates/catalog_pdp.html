@@ -27,8 +27,7 @@
     <main class="container mx-auto p-8 grid grid-cols-2 gap-8">
       <div class="relative">
         <img
-          src="{{ item.image_url }}"
-          alt="Black tea cup on a dark surface"
+          src="{{ item.image_url if item.image_url else 'https://placehold.co/400'}}"
           class="max-w-sm object-cover mx-auto"
         />
         <span class="absolute top-4 right-4 bg-red-100 text-red-600 font-semibold px-3 py-1 text-sm">
