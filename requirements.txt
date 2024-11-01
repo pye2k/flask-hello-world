@@ -3,3 +3,5 @@ Gunicorn
 Flask-SQLAlchemy
 psycopg2-binary
 openai
+anthropic
+xmltodict

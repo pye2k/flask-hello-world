@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 import os
 import enricher
+from enricher_openai import OpenAIEnricher
+from enricher_anthropic import AnthropicEnricher
 import base64
 import re
 
@@ -137,22 +139,18 @@ def catalog_from_image():
         additional_context = request.form.get('context', '').strip()
 
         try:
-            # Call a function in enricher to handle the OpenAI request with image and context
-            enriched_resp = enricher.get_descriptions_from_image(image_url, additional_context)
-            # Clean up the resultant JSON
-            enriched_resp = enriched_resp.replace('\n', '')
-            # Remove leading and trailing spaces in keys using regex
-            enriched_resp = re.sub(r'"\s*([^"]*?)\s*"\s*:', r'"\1":', enriched_resp)
-            descriptions = json.loads(enriched_resp.replace('\n', ''))
+            #enricher = AnthropicEnricher()
+            enricher = OpenAIEnricher()
+            descriptions = enricher.enrich_from_image(image_url, additional_context)
 
             # Create a new CatalogItem object with the extracted data
             new_item = CatalogItem(
                 input=additional_context,
                 image_url=image_url,
-                title=descriptions.get('product_title'),
-                short_description=descriptions.get('short_description'),
-                long_description=descriptions.get('detailed_description'),
-                specifications=descriptions.get('specifications')
+                title=descriptions['product_title'],
+                short_description=descriptions['short_description'],
+                long_description=descriptions['detailed_description'],
+                specifications=descriptions['specifications']
             )
 
             # Persist the new item to the database
