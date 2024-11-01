@@ -4,12 +4,15 @@ from catalog_enricher import CatalogEnricher
 
 class AnthropicEnricher(CatalogEnricher):
 
+    def __init__(self, model="claude-3-5-sonnet-20241022"):
+        self.model = model
+
     def enrich_from_image(self, image_url, additional_context):
         # ensure that API key is set for os.environ.get("ANTHROPIC_API_KEY")
         client = anthropic.Anthropic()
 
         message = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+            model=self.model,
             max_tokens=1000,
             temperature=0.7,
             system="You are a catalog enrichment expert tasked with generating e-commerce marketplace content based on an image and optional additional context. Your goal is to create engaging, SEO-optimized content that accurately describes the product and appeals to potential customers.",

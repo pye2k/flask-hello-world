@@ -25,6 +25,7 @@ class CatalogItem(db.Model):
     long_description = db.Column(db.Text, nullable=True)
     specifications = db.Column(db.JSON, nullable=True)
     image_url = db.Column(db.Text, nullable=True)
+    model = db.Column(db.Text, nullable=True)
 
 @app.route('/')
 def hello_world():
@@ -139,23 +140,25 @@ def catalog_from_image():
         additional_context = request.form.get('context', '').strip()
 
         try:
-            #enricher = AnthropicEnricher()
-            enricher = OpenAIEnricher()
-            descriptions = enricher.enrich_from_image(image_url, additional_context)
+            enrichers = [OpenAIEnricher(), AnthropicEnricher()]
+            for enricher in enrichers:
+                print(f"Running enricher for: {enricher.model}")
+                descriptions = enricher.enrich_from_image(image_url, additional_context)
 
-            # Create a new CatalogItem object with the extracted data
-            new_item = CatalogItem(
-                input=additional_context,
-                image_url=image_url,
-                title=descriptions['product_title'],
-                short_description=descriptions['short_description'],
-                long_description=descriptions['detailed_description'],
-                specifications=descriptions['specifications']
-            )
+                # Create a new CatalogItem object with the extracted data
+                new_item = CatalogItem(
+                    input=additional_context,
+                    image_url=image_url,
+                    title=descriptions['product_title'],
+                    short_description=descriptions['short_description'],
+                    long_description=descriptions['detailed_description'],
+                    specifications=descriptions['specifications'],
+                    model=enricher.model
+                )
 
-            # Persist the new item to the database
-            db.session.add(new_item)
-            db.session.commit()
+                # Persist the new item to the database
+                db.session.add(new_item)
+                db.session.commit()
         except Exception as e:
             return render_template('catalog_from_image.html', error=f"An error occurred: {str(e)}")
 

@@ -4,11 +4,15 @@ import json, re
 
 class OpenAIEnricher(CatalogEnricher):
 
+    def __init__(self, model="gpt-4o-mini"):
+        self.model = model
+
     def enrich_from_image(self, image_url, additional_context):
         client = OpenAI()
 
         # Retrieve the handle to the "Catalog descriptions from images" Assistant
         assistant = client.beta.assistants.retrieve("asst_tL7qx1mIDxeZQuwvdH1BNM5n")
+        self.model = assistant.model
 
         # Create a thread (a conversation between user and agent)
         thread = client.beta.threads.create(
