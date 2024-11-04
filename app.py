@@ -29,7 +29,7 @@ class CatalogItem(db.Model):
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return redirect(url_for('catalog'))
 
 @app.route('/catalog')
 def catalog():
