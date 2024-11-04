@@ -59,7 +59,7 @@ def go(input):
     # The slicing is to remove some random stuff from the OpenAI APIs
     # "```json" is 7 character long, but slicing count start from 0. "{" is at 7th character.
     # "```" is 3 character long (at the end).
-    return message_content.strip() #[7:-3]
+    return message_content.strip()[7:-3]
 
 def interweave(short_description, search_query):
     client = OpenAI()

@@ -73,7 +73,8 @@ def add_catalog_item():
             title=title,
             short_description=short_description,
             long_description=detailed_description,
-            specifications=specifications
+            specifications=specifications,
+            model="gpt-4o-mini"
         )
         
         # Persist the new item to the database
