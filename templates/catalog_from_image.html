@@ -3,54 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link an Image to generate Catalog Description</title>
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.jade.min.css">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
-    <style>
-        .container {
-            margin: 20px;
-            font-family: Arial, sans-serif;
-        }
-        .error {
-            color: red;
-        }
-        .description {
-            margin-top: 20px;
-        }
-        .description p {
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-radius: 5px;
-        }
-    </style>
+    <title>Link an Image to generate Catalog Description</title>
 </head>
 <body>
-    <div class="container">
+    <main class="container">
         <h1>Generate Catalog Descriptions from Image</h1>
         
         {% if error %}
-            <p class="error">{{ error }}</p>
+        <article>
+            <header><strong>Error:</strong></header>
+            {{ error }}
+        </article>
         {% endif %}
 
-        <form action="{{ url_for('catalog_from_image') }}" method="post">
-            <label for="image">Image URL:</label><br>
-            <input type="text" id="image_url" name="image_url" style="width: 50%;" placeholder="Enter image URL here"><br><br>
-
-            <label for="context">Additional Context (e.g., Brand, Model Number, etc.):</label><br>
-            <input type="text" id="context" name="context" style="width: 50%;" placeholder="Enter additional context here"><br><br>
-
-            <button type="submit">Submit</button>
+        <form action="{{ url_for('catalog_from_image') }}" method="POST">
+            <label>
+                Image URL:
+                <input type="text" name="image_url" placeholder="Enter image URL here...">
+            </label>
+            <label>
+                Additional Context (e.g., Brand, Model Number, etc.):
+                <input type="text" name="context" placeholder="Enter additional context here...">
+            </label>
+            <input type="submit"/>
         </form>
 
         {% if descriptions %}
-            <div class="description">
-                <h2>Generated Descriptions:</h2>
-                <p><strong>Product Title:</strong> {{ descriptions.get('product_title', 'N/A') }}</p>
-                <p><strong>Short Description:</strong> {{ descriptions.get('short_description', 'N/A') }}</p>
-                <p><strong>Detailed Description:</strong> {{ descriptions.get('detailed_description', 'N/A') }}</p>
-                <p><strong>Specifications:</strong> {{ descriptions.get('specifications', 'N/A') | tojson(indent=4) | safe }}</p>
-            </div>
+        <article>
+            <header><strong>Generated Descriptions:</strong></header>
+            <p><strong>Product Title:</strong> {{ descriptions.get('product_title', 'N/A') }}</p>
+            <p><strong>Short Description:</strong> {{ descriptions.get('short_description', 'N/A') }}</p>
+            <p><strong>Detailed Description:</strong> {{ descriptions.get('detailed_description', 'N/A') }}</p>
+            <p><strong>Specifications:</strong> {{ descriptions.get('specifications', 'N/A') | tojson(indent=4) | safe }}</p>
+        </article>
         {% endif %}
-    </div>
+    </main>
 </body>
 </html>
