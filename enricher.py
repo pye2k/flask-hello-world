@@ -111,7 +111,8 @@ def highlight_keywords(text, keywords):
     pattern = r'(' + '|'.join(escaped_keywords) + r')'
     # Define the replacement function
     def replace_func(match):
-        return f'<span class="highlight">{match.group(0)}</span>'
+        # The <mark> tag is specifically for highlighting text in the Pico CSS framework
+        return f'<mark>{match.group(0)}</mark>'
     # Substitute the keywords in the text with the highlighted version
     highlighted_text = re.sub(pattern, replace_func, text, flags=re.IGNORECASE)
     return highlighted_text
