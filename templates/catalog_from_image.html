@@ -6,11 +6,18 @@
     <meta name="color-scheme" content="light dark" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.jade.min.css">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
-    <title>Link an Image to generate Catalog Description</title>
+    <title>New item from image</title>
 </head>
 <body>
     <main class="container">
-        <h1>Generate Catalog Descriptions from Image</h1>
+        <h1>New item from image</h1>
+
+        <nav aria-label="breadcrumb">
+            <ul>
+                <li><a href="{{ url_for('catalog') }}">Home</a></li>
+                <li>New item from image</li>
+            </ul>
+        </nav>
         
         {% if error %}
         <article>
