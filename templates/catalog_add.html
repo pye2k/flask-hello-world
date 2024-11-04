@@ -4,16 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Catalog Item</title>
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.jade.min.css">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
+    <title>Add Catalog Item</title>
 </head>
 <body>
-    <h1>Enrich a Catalog Item</h1>
-    <form action="/catalog/add" method="POST">
-        <label for="inputText">Enter Catalog Data:</label><br><br>
-        <textarea id="inputText" name="inputText" rows="40" cols="80" placeholder="Enter your text here..."></textarea><br><br>
-        <button type="submit">Add</button>
-    </form>
+    <main class="container">
+        <h1>Enrich a Catalog Item</h1>
+
+        <form action="/catalog/add" method="POST">
+            <label>
+                Enter Catalog Data:
+                <textarea name="inputText" rows=25 placeholder="Enter your text here..."></textarea>
+            </label>
+            <input type="submit" value="Add"/>
+        </form>
+    </main>
 </body>
 </html>
