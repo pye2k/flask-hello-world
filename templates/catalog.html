@@ -6,67 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.jade.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
     <title>Catalog Items</title>
-    <script type="text/javascript">
-        function toggleText(button) {
-            // Get the sibling <span> element (the hidden text)
-            var hiddenText = button.nextElementSibling;
-
-            // Toggle the visibility
-            if (hiddenText.style.display === "none" || hiddenText.style.display === "") {
-                hiddenText.style.display = "inline";
-                button.innerText = "Hide Details";
-            } else {
-                hiddenText.style.display = "none";
-                button.innerText = "Show Details";
-            }
-        }
-    </script>
 </head>
 <body>
     <main class="container">
         <h1>Catalog Items</h1>
 
-        <a href="{{ url_for('add_catalog_item') }}"><button>Add New Item</button></a>
-        <a href="{{ url_for('catalog_from_image') }}"><button>Item from image</button></a>
+        <section>
+            <a href="{{ url_for('add_catalog_item') }}"><button>Add New Item</button></a>
+            <a href="{{ url_for('catalog_from_image') }}"><button>Item from image</button></a>
+        </section>
 
-        <table class="striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Input</th>
-                    <th>Title</th>
-                    <th>Short Description</th>
-                    <th>Long Description</th>
-                    <th>Specifications</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.input }}
-                        {% if item.image_url %}
-                            <br/><br/><img src="{{ item.image_url }}" style="max-width: 200px; max-height: 150px;">
-                        {% endif %}
-                        <br/><br/><button class="secondary" disabled>{{ item.model }}</button>
-                    </td>
-                    <td>
-                        <a href="{{ url_for('catalog_pdp', id=item.id) }}">{{ item.title }}</a>
-                    </td>
-                    <td>
-                        {{ item.short_description }}
-                        <a href="{{ url_for('catalog_realtime', id=item.id) }}"><button>Realtime modification!</button></a>
-                    </td>
-                    <td>{{ item.long_description }}</td>
-                    <td>
-                        <button onclick="toggleText(this)">Show Details</button>
-                        <span class="hidden-text" style="display: none"><pre>{{ item.specifications | tojson(indent=4) | safe }}</pre></span>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% for item in items %}
+        <div class="grid parent">
+            <div class="div1"><h3 style="text-transform:uppercase">#{{ item.id }}</h3></div>
+            <div class="div2"><h3 style="text-transform:uppercase">Input Data</h3></div>
+            <div class="div3">{{ item.input }}</div>
+            <div class="div4" style="text-align: center">
+                {% if item.image_url %}
+                    <img src="{{ item.image_url }}" style="max-width: 75%; height: auto;">
+                {% endif %}
+            </div>
+            <div class="div5"><h3 style="text-transform:uppercase">Model Outputs</h3></div>
+            <div class="div6"><small><mark>{{ item.model }}</mark></small></div>
+            <div class="div7"><a href="{{ url_for('catalog_pdp', id=item.id) }}">{{ item.title }}</a></div>
+            <div class="div8">{{ item.short_description }} 👈 
+                <a href="{{ url_for('catalog_realtime', id=item.id) }}">TRY realtime modification!</a>
+            </div>
+            <div class="div9">{{ item.long_description }}</div>
+            <div class="div10">
+                <details>
+                    <summary role="button" class="primary outline">Specifications</summary>
+                    <pre>{{ item.specifications | tojson(indent=4) | safe }}</pre>
+                </details>
+            </div>
+        </div>
+
+        <hr/>
+        {% endfor %}
     </main>
 </body>
 </html>
