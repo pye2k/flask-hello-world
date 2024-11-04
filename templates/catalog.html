@@ -13,9 +13,9 @@
     <main class="container">
         <h1>Catalog Items</h1>
 
-        <section>
-            <a href="{{ url_for('add_catalog_item') }}"><button>Add New Item</button></a>
-            <a href="{{ url_for('catalog_from_image') }}"><button>Item from image</button></a>
+        <section role="group">
+            <a href="{{ url_for('add_catalog_item') }}" role="button">New item from text</a>
+            <a href="{{ url_for('catalog_from_image') }}" role="button">New item from image</a>
         </section>
 
         {% for item in items %}
