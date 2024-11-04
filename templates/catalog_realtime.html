@@ -3,70 +3,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Realtime Catalog Item</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.jade.min.css">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
-    <style>
-        .container {
-            margin: 20px;
-            font-family: Arial, sans-serif;
-        }
-        .search-box {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        .search-box input[type="text"] {
-            width: 300px;
-            padding: 8px;
-            font-size: 14px;
-        }
-        .search-box button {
-            padding: 8px 16px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .description {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-        .error {
-            color: red;
-        }
-        .highlight {
-            background-color: yellow;
-        }
-    </style>
+    <title>Realtime Catalog Item</title>
 </head>
 <body>
-    <div class="container">
+    <main class="container">
         <h1>Realtime Catalog Item</h1>
         
-        {% if item.short_description %}
-            <div class="description">
-                <strong>Short Description:</strong><br>
-                <p>{{ item.short_description }}</p>
-            </div>
-        {% else %}
-            <p class="error">No short description available for this item.</p>
-        {% endif %}
+        <article>
+            <header><strong>Short Description:</strong></header>
+            {{ item.short_description }}
+        </article>
 
-        <div class="search-box">
-            <form action="{{ url_for('catalog_realtime') }}" method="get">
-                <!-- Include the 'id' as a hidden field -->
-                <input type="hidden" name="id" value="{{ item.id }}">
-                
-                <label for="search_query"><strong>Enter Search Query:</strong></label><br><br>
-                <input type="text" id="search_query" name="search_query" placeholder="Type your search query here" value="{{ search_query }}">
-                <button type="submit">Search</button>
-            </form>
-        </div>
+        <form action="{{ url_for('catalog_realtime') }}" method="GET">
+            <!-- Include the 'id' as a hidden field -->
+            <input type="hidden" name="id" value="{{ item.id }}">
+
+            <label>
+                Enter Search Query:
+                <input type="text" name="search_query" placeholder="Enter your search query here..." value="{{ search_query }}">
+            </label>
+            <input type="submit" value="Search"/>
+        </form>
 
         {% if personalized_description %}
-            <div class="description">
-                <strong>Personalized Description:</strong><br>
-                <p>{{ personalized_description | safe}}</p>
-            </div>
+        <article>
+            <header><strong>Personalized Description:</strong></header>
+            {{ personalized_description | safe}}
+        </article>
         {% endif %}
-    </div>
+    </main>
 </body>
 </html>
