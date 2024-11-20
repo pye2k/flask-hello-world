@@ -8,7 +8,7 @@ from flask import url_for
 import uuid
 
 def build_toolchain():
-    search = TavilySearchResults(max_results=2)
+    search = TavilySearchResults(max_results=1)
 
     # Put all the tools into a list to reference later.
     tools = []
@@ -48,6 +48,8 @@ def write(catalog_item):
     agent = get_agent()
 
     product_link = url_for('catalog_pdp', id=catalog_item.id, _external=True)
+    #For testing. Need an absolute link for the model to access the content.
+    #product_link = f"https://flask-hello-world-n1hj.onrender.com/catalog/pdp?id={catalog_item.id}"
     print(f"Generating product article using product_link: {product_link}")
 
     user_prompt = f"""
@@ -56,15 +58,17 @@ def write(catalog_item):
     URL: {product_link}
 
     The following are steps I want you to take:
-    1. Identify the product based on its URL
-    2. Search for 2 or 3 competing products in the same category to compare against
-    3. Write a long form article to promote the product
+    1. Identify the product based on its URL. We'll refer to this as the input product.
+    2. Search for competing products in the same category to compare the input product against.
+    3. From the search results, identify the top 2 products that are most similar to the input product.
+    4. Write a long form article to promote the product. Include the following sections: Introduction, Overview of Products, Product Feature Comparison, Pricing, Final Recommendation.
+    5. In the Final Recommendation, include a call-to-action to purchase the input product, which links back to the URL above.
 
     The following are guardrails that I want you to stay within:
     1. The article should be engaging, informative, and SEO-optimized.
-    2. The article must include a table to showcase the products side-by-side, with images and highlighting key features.
-    3. The article must compare a minimum of 3 products, and a maximum of 4 products, inclusive of the input product.
-    4. The article must include images of the specified product, and the products which it is compared against. Ensure that the images are valid image types and that non-images are used in the "img src" property.
+    2. The article must include a table in the Product Feature Comparison section to showcase the products side-by-side, with images where available, and highlighting key features.
+    3. The article must compare a minimum of 3 products, inclusive of the input product.
+    4. The article must include images of the mentioned products. When images are not available, use the following as the image source instead: https://placehold.co/100
 
     The output article is to be in HTML format. Include nothing else, no pre-amble, no explanations. Output only the HTML that is valid and proper such that it can be rendered directly.
     """
