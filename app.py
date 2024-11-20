@@ -5,6 +5,7 @@ import os
 import enricher
 from enricher_openai import OpenAIEnricher
 from enricher_anthropic import AnthropicEnricher
+import article_agent
 import base64
 import re
 
@@ -26,6 +27,15 @@ class CatalogItem(db.Model):
     specifications = db.Column(db.JSON, nullable=True)
     image_url = db.Column(db.Text, nullable=True)
     model = db.Column(db.Text, nullable=True)
+
+    # Add relationship to catalog articles
+    articles = db.relationship('CatalogArticle', backref='catalog_item', lazy=True)
+
+class CatalogArticle(db.Model):
+    __tablename__ = 'catalog_articles'
+    id = db.Column(db.Integer, primary_key=True)
+    catalog_item_id = db.Column(db.Integer, db.ForeignKey('catalog_items.id'), nullable=False)
+    article_html = db.Column(db.Text, nullable=True)
 
 @app.route('/')
 def hello_world():
@@ -183,3 +193,55 @@ def catalog_pdp():
         return f"Error: No item found with id {item_id}."
 
     return render_template('catalog_pdp.html', item=item)
+
+@app.route('/catalog/article')
+def catalog_article():
+    # Get the 'article_id' query parameter from the URL
+    article_id = request.args.get('article_id')
+    if article_id is not None:
+        try:
+            # Convert 'article_id' to integer
+            article_id = int(article_id)
+
+            # Check if an article already exists for this item
+            existing_article = CatalogArticle.query.get(article_id)
+
+            if existing_article is None:
+                return f"Error: No article found with id {article_id}."
+
+            return render_template('catalog_article.html', article_html=existing_article.article_html)
+        except ValueError:
+            return "Error: Invalid 'article_id' parameter. Please provide a valid integer."
+
+    #
+    # If no 'article_id' is provided, it implictly means we should generate one
+    #
+
+    # Get the 'id' query parameter from the URL
+    item_id = request.args.get('item_id')
+    if item_id is None:
+        return "Error: No 'item_id' parameter provided. Please specify an 'item_id' in the URL."
+    try:
+        # Convert id to integer
+        item_id = int(item_id)
+    except ValueError:
+        return "Error: Invalid 'item_id' parameter. Please provide a valid integer."
+
+    # Query the CatalogItem with the given id
+    item = CatalogItem.query.get(item_id)
+    if item is None:
+        return f"Error: No item found with id {item_id}."
+    else:
+        # If no article exists, generate a new one
+        article_html = article_agent.write(item)
+
+        # Create a new CatalogArticle object with the generated article
+        new_article = CatalogArticle(article_html=article_html)
+        new_article.catalog_item = item
+
+        # Persist the new article to the database
+        db.session.add(new_article)
+        db.session.commit()
+
+        # Render the newly generated article
+        return render_template('catalog_article.html', article_html=article_html)

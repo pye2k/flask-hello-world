@@ -41,6 +41,17 @@
                     <pre>{{ item.specifications | tojson(indent=4) | safe }}</pre>
                 </details>
             </div>
+            <div class="div11">
+                {% if item.articles %}
+                    {% set counter = 1 %}
+                    {% for article in item.articles %}
+                        <a href="{{ url_for('catalog_article', article_id=article.id) }}">View Article #{{ counter }}</a>
+                        {% set counter = counter + 1 %}
+                    {% endfor %}
+                {% else %}
+                    📰 <a href="{{ url_for('catalog_article', item_id=item.id) }}">TRY to generate an article!</a>
+                {% endif %}
+            </div>
         </div>
 
         <hr/>
