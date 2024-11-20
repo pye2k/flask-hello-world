@@ -5,3 +5,6 @@ psycopg2-binary
 openai
 anthropic
 xmltodict
+langchain_openai
+langchain_community
+langgraph
