@@ -64,7 +64,7 @@ def write(catalog_item):
     1. The article should be engaging, informative, and SEO-optimized.
     2. The article must include a table to showcase the products side-by-side, with images and highlighting key features.
     3. The article must compare a minimum of 3 products, and a maximum of 4 products, inclusive of the input product.
-    4. The article must include images of the specified product, and the products which it is compared against.
+    4. The article must include images of the specified product, and the products which it is compared against. Ensure that the images are valid image types and that non-images are used in the "img src" property.
 
     The output article is to be in HTML format. Include nothing else, no pre-amble, no explanations. Output only the HTML that is valid and proper such that it can be rendered directly.
     """
